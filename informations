@@ -1,0 +1,17 @@
+- daca avem intr-o clasa un ManyToOne nu trebuie neaparat sa avem si in cealalta clasa OneToMany -> trebuie sa ne gandim din care clasa vom accesa informatiile celeilalte clase
+ de exemplu: daca avem intre Attachment si Bug o relatie ManyToOne inseamna ca din clasa Attachment avem acces la informtiile Bug-ului, daca vrem sa avem si in clasa Bug informatii
+ legate de attachmenturile Bug-ului putem sa punem acolo o relatie OneToMany cu list de attachmenturi
+
+- la ManyToMany trebuie sa sa facem un JoinTable
+    @ManyToMany(fetch = FetchType.LAZY) -- fetch = FetchType.LAZY este optional, lazy ne incarca datele doar daca avem nevoie de ele
+    @JoinTable( name = "users_roles", -- numele tabelului din pgAdmin
+                joinColumns = @JoinColumn(name = "user_id_user"), -- FK1 din tabelul intermediar
+                inverseJoinColumns = @JoinColumn(name = "roles_id_role")) -- FK2 din tabelul intermediar
+    private List<Role> roles;
+
+- la ManyToOne avem JoinColumn
+    @JoinColumn(name = "id_bug_id_bug", referencedColumnName = "idBug") -- name: numele coloanei din tabel din pgAdmin, referencedColumnName: id-ul obiectului la care face referire
+
+- la OneToMany in Bug de exemplu:
+    @OneToMany(mappedBy = "bug", cascade = CascadeType.REMOVE) -- la mappedBy punem atributul din clasa Attachment care are referire la clasa Bug
+    private List<Attachment> attachment;
